@@ -1,0 +1,96 @@
+<!--CONTENEDOR TRANSPARENTE-->
+<div style="display: flex;width: 100%;height: 100%;">
+    <div *ngIf="ProductoVisualizando != null" style="display: flex;width: 100%;z-index: 10;height: 100%;position: absolute;background-color: #80808082;">
+        <div style="position:relative;z-index: 10;height: 60vh;width: 80vw;margin: auto;background-color: white;border-radius: 20px;display: flex;flex-direction: column;justify-content: space-evenly;padding-bottom: 10px; padding-top: 10px;">
+            <div style="display: flex;width: 100%;justify-content: center">
+                <ion-icon name="arrow-back-outline" style="margin: auto 0;font-size: 20px;" (click)="ProductoVisualizando = null;"></ion-icon>
+                <ion-label style="width: 78%; font-size: 80%; color: black; text-align: center; font-weight: bold;">{{ProductoVisualizando.product_STORE_NAME}}</ion-label>
+                <ion-icon name="arrow-back-outline" style="margin: auto 0;font-size: x-large;opacity: 0"></ion-icon>
+            </div>
+            <img class="AjusteImg" style="margin: 0 auto;border-radius: 0px;overflow: hidden;height: 50%;border-radius: 0px;border: none;" [src]="'https://tienda724.com'+ProductoVisualizando.img" loop="true" onError="src = 'assets/catNotFound.jpeg'">
+            <ion-label style="font-size: 120%;color: black;margin: 0 auto;">Precio: {{ GetItemPrice(ProductoVisualizando) | currency : 'USD' : 'symbol' : '1.0' }}</ion-label>
+            <ion-button style="width: 70%;margin: 0 auto;--background: #513089;color: white; font-size: 13px;" (click)="AddProducto(ProductoVisualizando);ProductoVisualizando = null;">Agregar</ion-button>
+        </div>
+    </div>
+    <!--PARTE QUE CONTIENE TODO SOBRE EL BOTON CERRAR-->
+    <div style="transition: all 1s;width: 90%;height:90%;background-color: white;border-radius: 25px;box-shadow: 0 3px 14px 2px rgba(0, 0, 0, 0.59);margin: auto;overflow: auto;margin-bottom:auto;" [ngClass]="this.inventoriesService.cartService.ListaTablaProductosSeleccionados.length > 0 ? 'BotonAbierto':''">
+        <div style="height: 7%;width: 90%;display: flex;margin: 0 auto;">
+            <ion-icon name="arrow-back-outline" style="margin: auto 0;font-size: x-large; color: #513089;" (click)="ClickCerrar()"></ion-icon>
+            <ion-label style="margin: auto;font-weight: bold;font-size: 100%;padding-top: 3px; color: #513089;">Productos</ion-label>
+            <div style="width: 13vw;margin: auto 0;margin-right: 5px;display: flex">
+                <ion-icon style="font-size: 7vw;margin: auto 0;margin-left: auto;" name="cart-outline" (click)="ClickCarrito()"></ion-icon>
+                <ion-label style="color: #007b00;background-color: #ffffff;border-radius: 50px;margin-left: -10px;margin-top: -5px;height: 100%;z-index: 1;font-weight: 700;">{{this.inventoriesService.cartService.ListaTablaProductosSeleccionados.length}}</ion-label>
+            </div>
+        </div>
+        <div style="height: 0.5%;width: 100%;display: flex;margin: 0 auto;background-color: black"></div>
+        <!--    CLASE QUE DEFINE EL GRID-->
+        <div style="display: flex;height: 92%;width: 100%;overflow: auto;flex-direction: column">
+            <!--                EL BUSCADOR-->
+            <div style="display: flex;box-shadow: 0 1px 5px 1px rgb(172, 172, 172);width: calc(100% - 12px);margin: 6px;">
+                <ion-searchbar #Buscador style="--box-shadow: unset;box-shadow: unset;padding: 0;" placeholder="Buscar Producto" (keyup)="filterList($event)" [style.width]="this.Buscando?'90%':'100%'">
+                </ion-searchbar>
+                <ion-spinner [hidden]="!this.Buscando" style="width: 10%;margin: auto 0" name="crescent"></ion-spinner>
+            </div>
+            <!--                LA SECCIÓN PARA BUSCAR POR PROVIDERS-->
+            <!--            <div style="display: flex;padding: 5px;width: 100%;height: 8%">-->
+            <!--                <div *ngIf="CurrentCat != '' || CurrentLine != ''" style="display: flex;width: 63%">-->
+            <!--                    <ion-label style="margin: auto;width: 62%;color: rgb(5, 53, 107);font-weight: bold;text-align: center;text-transform: capitalize">Buscar Solo En:<br>{{this.CurrentCat == ''? this.CurrentLine.toLowerCase():this.CurrentCat.toLowerCase()}}</ion-label>-->
+            <!--                    <ion-checkbox [(ngModel)]="BuscarSoloCurrentCat" style="margin: auto"></ion-checkbox>-->
+            <!--                </div>-->
+            <!--                &lt;!&ndash;                    TITULO QUE SE OCULTA DEL SELECTOR&ndash;&gt;-->
+            <!--                <div *ngIf="CurrentCat == '' && CurrentLine == ''" style="color: rgb(5, 53, 107);font-weight: bold;text-align: center;width: 65%;margin: auto">Seleccione Fabricantes:</div>-->
+            <!--                &lt;!&ndash;                EL SELECTOR&ndash;&gt;-->
+            <!--                <ionic-selectable-->
+            <!--                        [(ngModel)]="this.VariableSelectorProviders"-->
+            <!--                        [items]="this.GetKeysProviders()"-->
+            <!--                        [isMultiple]="true"-->
+            <!--                        [canClear]="true"-->
+            <!--                        [hasVirtualScroll]="true"-->
+            <!--                        itemValueField="id"-->
+            <!--                        itemTextField="name"-->
+            <!--                        [canSearch]="true"-->
+            <!--                        clearButtonText='Limpiar'-->
+            <!--                        closeButtonText='Volver'-->
+            <!--                        (onChange)="ClickProviderBuscador($event)"-->
+            <!--                        style="width: 35%;height:100%;text-align: center;margin: auto;position: relative">-->
+            <!--                    <ng-template ionicSelectableItemTemplate let-port="item">-->
+            <!--                        {{this.inventoriesService.ProvidersList[port]}}-->
+            <!--                    </ng-template>-->
+            <!--                    <ng-template ionicSelectablePlaceholderTemplate>-->
+            <!--                        <span style="color: black;">Filtro</span>-->
+            <!--                    </ng-template>-->
+            <!--                    <ng-template ionicSelectableValueTemplate let-ports="value">-->
+            <!--                        Seleccione Fabricante-->
+            <!--                    </ng-template>-->
+            <!--                </ionic-selectable>-->
+            <!--            </div>-->
+            <!--            &lt;!&ndash;                CONTENEDOR DE LOS CHIPS&ndash;&gt;-->
+            <!--            <div style="display: flex;flex-wrap: wrap;">-->
+            <!--                <ion-chip *ngFor="let proveedor of this.ListadoProvidersSeleccionados" (click)="this.ClickQuitarProvider(proveedor)">-->
+            <!--                    <ion-label>{{proveedor.name}}</ion-label>-->
+            <!--                    <ion-icon name="close-circle"></ion-icon>-->
+            <!--                </ion-chip>-->
+            <!--            </div>-->
+            <!--                EL LISTADO DEL CONTENIDO-->
+            <ion-content>
+                <!--                IMAGEN SELECCIONADA PARA VISAULIZAR-->
+                <ion-virtual-scroll [items]="this.CartService.ListaProductosFiltradosBuscador" approxItemHeight="320px">
+                    <ion-item *virtualItem="let item; let itemBounds = bounds;" (click)="AddProducto(item)">
+                        <div style="width: 100%;display: flex;height: 12vh; margin-top: 15px; margin-bottom: 15px !important;" [style]="'color: '+(this.CartService.DiccionarioIdsProductosSeleccionados[item.ownbarcode] == null ? '#4c4b4b':'#998ab3')">
+                            <div style="height: 100%;width: 25%" (click)="$event.stopPropagation();ProductoVisualizando = item">
+                                <img class="AjusteImg" style="margin: auto;border-radius: 10px;overflow: hidden" [src]="'https://tienda724.com'+item.img" loop="true" onError="src = 'assets/catNotFound.jpeg'">
+                            </div>
+                            <div style="display: flex;flex-direction: column;width: 70%;margin-left: auto">
+                                <ion-label style="height: 50%;white-space: unset" class="TextoProducto">{{ item.product_STORE_NAME.toLowerCase() }}</ion-label>
+                                <div class="uk-flex uk-flex-middle" style="width: 100%;display: flex">
+                                    <ion-label style="width: 100%;font-size: 85%">Precio: {{ GetItemPrice(item) | currency : 'USD' : 'symbol' : '1.0' }}</ion-label>
+                                    <ion-icon style="margin: auto 0; font-size: 30px; color: #513089;" name="add-circle"></ion-icon>
+                                </div>
+                            </div>
+                        </div>
+                    </ion-item>
+                </ion-virtual-scroll>
+            </ion-content>
+        </div>
+    </div>
+</div>

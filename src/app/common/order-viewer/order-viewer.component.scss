@@ -1,0 +1,72 @@
+.EstiloProgressBar {
+    height: 100% !important;
+    width: 100% !important;
+    margin: auto;
+    position: absolute;
+    //z-index: 10;
+}
+
+::ng-deep.ldBar-label {
+    color: #ffffff00;
+    font-size: 2.5em;
+    font-weight: 900;
+    text-shadow: unset !important;
+}
+
+.CirculoPendiente {
+    height: 25px;
+    width: 25px;
+    border-radius: 20px;
+    background-color: #FAD263;
+    border: solid 1px black;
+    display: flex;
+    div[name="dentro"] {
+        height: 15px;
+        width: 15px;
+        border-radius: 20px;
+        border: solid 2px white;
+        background-color: gray;
+        margin: auto;
+    }
+}
+
+.MostrarProgress {}
+
+.Ocultar {
+    //display: none !important;
+    z-index: -1;
+}
+
+.CirculoCompletado {
+    height: 25px;
+    width: 25px;
+    border-radius: 20px;
+    background-color: #FAD263;
+    border: solid 1px black;
+    display: flex;
+    div[name="dentro"] {
+        height: 15px;
+        width: 15px;
+        border-radius: 20px;
+        border: solid 2px white;
+        background-color: #01B6B2;
+        margin: auto
+    }
+}
+
+.CirculoCompletadoCancelado {
+    height: 25px;
+    width: 25px;
+    border-radius: 20px;
+    background-color: #FAD263;
+    border: solid 1px black;
+    display: flex;
+    div[name="dentro"] {
+        height: 15px;
+        width: 15px;
+        border-radius: 20px;
+        border: solid 2px white;
+        background-color: #BF1757;
+        margin: auto
+    }
+}

@@ -1,0 +1,24 @@
+<div style="background-color: white;width: 100%;height: 100%;display: flex;flex-direction: column">
+    <div style="height: 8%;width: 90%;display: flex;margin: 0 auto">
+        <ion-icon name="arrow-back-outline" style="margin: auto 0;font-size: 20px; color: #513089;" (click)="CerrarModal()"></ion-icon>
+        <ion-label style="margin: auto;font-weight: bold; font-size: 90%; color: #513089;">{{this.inventoriesService.LineaList[this.CurrentLineaID].nombre}}</ion-label>
+        <ion-icon name="arrow-back-outline" style="margin: auto 0;color: white;font-size: x-large;"></ion-icon>
+    </div>
+    <!--  BUSCADOR PRODUCTOS DENTRO DE ESTA LINEA-->
+    <ion-searchbar style="height: 15vw" placeholder="Buscar Producto" (click)="AbrirBuscadorProductos()">
+    </ion-searchbar>
+    <!--  LAS CATEGORIAS-->
+    <div style="overflow: auto;">
+        <div (click)="ClickCategoria(idCat)" *ngFor="let idCat of this.ListadoKeysCategorias;let i = index">
+            <div class="ContenedorLinea">
+                <div class="ContenidoLinea" style="">
+                    <div class="ContenedorImagen" style="">
+                        <img class="AjusteImg" [src]="this.inventoriesService.GetFilePathForCategoryIMG(this.inventoriesService.LineaList[this.CurrentLineaID].categorias[idCat].nombre,this.inventoriesService.LineaList[this.CurrentLineaID].categorias[idCat].img)" loop="true"
+                            onError="src = '/assets/catNotFound.jpeg'">
+                    </div>
+                    <div [style.font-size]="CalcularSizeFont(this.inventoriesService.LineaList[this.CurrentLineaID].categorias[idCat].nombre)" class="TextoCategoria">{{this.inventoriesService.LineaList[this.CurrentLineaID].categorias[idCat].nombre.toLowerCase()}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

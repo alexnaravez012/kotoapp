@@ -1,0 +1,34 @@
+.NormalStarContainer{
+  height: 40px;
+  width: 40px;
+  background-color: gray;
+  color: white;
+  border-radius: 20px;
+  overflow: hidden;
+  display: flex;
+  margin: auto;
+  ion-icon{
+    margin: auto;
+    font-size: x-large;
+  }
+}
+
+.SelectedStarContainer{
+  background-color: gold;
+  color: #000000;
+  border: solid 1px black
+}
+
+ion-icon{
+  ::ng-deep path{
+    stroke-width: 100px !important;
+    fill: gold !important;
+  }
+}
+
+::ng-deep.popover-content {
+  width: 80vw !important;
+  left: 10vw !important;
+  background-color: #f0f8ff00 !important;
+  box-shadow: unset !important;
+}

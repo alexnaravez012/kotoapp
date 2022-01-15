@@ -1,0 +1,241 @@
+<ion-content id="home">
+
+    <div style="display: flex;width: 100%;height: 15%; padding-top: 5px; box-shadow: 0 4px 4px rgba(167, 167, 167, 0.2);">
+        <ion-icon (click)="OpenMenu()" style="font-size: 10vw; margin: auto 5px; padding-left: 10px; color: #513089;" name="menu-outline"></ion-icon>
+        <div style="margin: auto 0;margin-right: auto;display: flex;flex-direction: column; padding-left: 10px;">
+            <ion-label style="font-size: 90%;text-transform: capitalize;font-weight: bold">Hola, {{this.accountService.GetNormalName()}}</ion-label>
+            <ion-label style="font-size: 65%;text-transform: capitalize">{{this.accountService.usuarioCompleto.address}}</ion-label>
+            <ion-label style="font-size: 65%;text-transform: capitalize">{{this.accountService.usuarioCompleto.city_NAME.toLowerCase()}}</ion-label>
+        </div>
+        <!--    <div *ngIf="!this.ProvInvalido" style="width: 13vw;margin: auto 0;margin-right: 5px;display: flex">-->
+        <!--      <div style="border-radius: 20px;margin: auto;background-color: white;padding: 4px;height: 10vw;width: 10vw;display: flex;border: solid 1px;overflow: hidden" (click)="ShowStoreInfo($event)">-->
+        <!--&lt;!&ndash;        <ion-label style="margin: auto;color: white;font-weight: bold">T</ion-label>&ndash;&gt;-->
+        <!--        <img src="{{'https://tienda724.com/logos/'+billingService.ProviderInfo.DocType+'%20'+billingService.ProviderInfo.DocNumber+'.jpg'}}">-->
+        <!--      </div>-->
+        <!--    </div>-->
+        <div *ngIf="!this.ProvInvalido" style="width: 50vw;margin: auto 0; margin-right: 10px;display: flex">
+            <div style="margin: auto;display: flex;flex-direction: column">
+                <ion-label style="font-weight: bold;font-size: 75%">{{this.billingService.ProviderInfo.Name}}</ion-label>
+                <ion-label style="font-size: 65%">{{this.billingService.ProviderInfo.Address}}</ion-label>
+                <ion-label style="font-size: 65%">{{this.billingService.ProviderInfo.CityName}}</ion-label>
+            </div>
+            <div style="margin: auto; padding: 4px; height: 17vw;width: 20vw; flex-shrink: 0; display: flex; overflow: hidden" (click)="ShowStoreInfo($event)">
+                <!--        <ion-label style="margin: auto;color: white;font-weight: bold">T</ion-label>-->
+                <img src="assets/koto1-2.jpg">
+            </div>
+        </div>
+    </div>
+
+    <!--                EL BUSCADOR-->
+    <ion-searchbar *ngIf="!this.ProvInvalido" style="height: 15vw; margin-top: 5px; font-size: 13px;" placeholder="Buscar Producto" (click)="AbrirBuscadorProductos()">
+    </ion-searchbar>
+
+    <!--  EL CONTENEDOR DE TODAS LAS LINEAS-->
+    <div *ngIf="!this.ProvInvalido" style="width: 100%;display: block; padding-bottom: 20px;" class="ContenedorLineasAnimation" [style.height]="this.LimitadorLineas ? 'calc(45vh + 30px)':this.CalcularTamMaximoContenedorLineas()">
+        <div (click)="ClickLinea(idLinea)" *ngFor="let idLinea of this.ListadoKeysLineas;let i = index">
+            <div class="ContenedorLinea" [hidden]="!((((ListadoKeysLineas.length > 9) && (i < 8)) || (ListadoKeysLineas.length <= 9)) || !LimitadorLineas)">
+                <div class="ContenidoLinea" style="">
+                    <div class="ContenedorImagen" style="">
+                        <img class="AjusteImg" [src]="this.inventoryService.GetFilePathForCategoryIMG(this.inventoryService.LineaList[idLinea].nombre,this.inventoryService.LineaList[idLinea].img)" loop="true" onError="src = '/assets/catNotFound.jpeg'">
+                    </div>
+                    <div [style.font-size]="CalcularSizeFont(this.inventoryService.LineaList[idLinea].nombre)" class="TextoCategoria">{{this.inventoryService.LineaList[idLinea].nombre.toLowerCase()}}</div>
+                </div>
+            </div>
+        </div>
+        <div (click)="ClickAlternarLineas()" class="ContenedorLinea" *ngIf="this.ListadoKeysLineas.length > 9">
+            <div class="ContenidoLinea" style="" *ngIf="LimitadorLineas">
+                <div style="margin: auto;font-weight: 500;text-align: center;">Mostrar Más</div>
+            </div>
+            <div class="ContenidoLinea" style="" *ngIf="!LimitadorLineas">
+                <div style="margin: auto; font-weight: 500; text-align: center;;">Mostrar Menos</div>
+            </div>
+        </div>
+    </div>
+
+    <!--  PEDIDOS EN CURSO-->
+    <div *ngIf="!this.ProvInvalido" style="width: calc(100% - 20px);margin: 10px;overflow: auto;height: 28vh; padding-top: 10px;">
+        <ion-label style="font-weight: bold;font-size: 18px;" *ngIf="this.billingService.ListadoPedidosActivos.length > 0">Pedidos en curso</ion-label>
+        <!--  CONTENEDOR-->
+        <div style="width: 100%;display: flex;flex-direction: column" *ngIf="this.billingService.ListadoPedidosActivos.length > 0">
+            <!--    ITEM, OSEA, PEDIDO-->
+            <div class="TarjetaPedido" *ngFor="let pedido of this.billingService.ListadoPedidosActivos;let i = index">
+                <!--      MITAD CENTRADA-->
+                <div style="display: flex;height: 100%;margin: auto;width: 100%; padding-top: 10px;" (click)="this.ClickOrder(pedido)">
+                    <!--        NUM PEDIDO-->
+                    <div style="display: flex; flex-direction: column; flex-shrink: 0; padding-left: 10px;">
+                        <div style="font-size: 80%;">N° Pedido</div>
+                        <div style="display: flex ;font-size: 90%; padding-top: 18px;">{{pedido.numdocumento}}</div>
+                    </div>
+                    <!--        DEMAS-->
+                    <div style="flex: auto;padding-left: 30px;display: flex; flex-direction: column;">
+                        <ion-label style="font-size: 90%;">{{this.FormatedDate(pedido.fecha)}}</ion-label>
+                        <ion-label style="font-size: 90%; width: 180px; padding-top: 15px;">{{BillStateToText(pedido.id_BILL_STATE)}} - {{pedido.tienda}}</ion-label>
+                    </div>
+                    <div style="display: flex; padding-top: 20px; padding-right: 10px;">
+                        <ion-icon style="margin: 0 auto; font-size: 30px; color: #513089;" name="arrow-forward-circle-outline"></ion-icon>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--  ESTO ES PARA EL CASO QUE NO SE TIENE UN PROOVEDOR VALIDO-->
+    <div *ngIf="this.ProvInvalido" style="display: flex;flex-direction: column;height: calc( 100% - 15vw);width: 70%;margin: 0 auto;">
+        <ion-icon name="warning-outline" style="font-size: 900%;margin: auto;margin-bottom: 0;"></ion-icon>
+        <ion-label style="margin: auto;font-size: 150%;text-align: justify;">No pudimos encontrar Tiendas 724 cercanas a tu ubicación</ion-label>
+    </div>
+</ion-content>
+
+<!--&lt;!&ndash;TODO PARA LO DEL CARRITO FLOTANTE&ndash;&gt;-->
+<!--<div style="display: flex;bottom: 0;width: 100%;height: 15%;position: absolute" [hidden]="this.inventoryService.cartService.ListaTablaProductosSeleccionados.length == 0">-->
+<!--  <div class="EstiloCarrito" (click)="ClickCarrito()">-->
+<!--&lt;!&ndash;    Circulo Contenedor&ndash;&gt;-->
+<!--    <div style="width: 5vh;height: 5vh;background-color: white;border-radius: 40px;display: flex;margin: auto;position: relative;border: solid 1px #a6a6a6;">-->
+<!--      <div style="margin: auto">{{this.inventoryService.cartService.ListaTablaProductosSeleccionados.length}}</div>-->
+<!--    </div>-->
+<!--&lt;!&ndash;    Titulo&ndash;&gt;-->
+<!--    <div style="display: flex;flex-direction: column;margin: auto;margin-left: 0;">-->
+<!--      <ion-label style="text-align: center;font-weight: bold;color: black;font-size: 120%">{{ roundnum(this.inventoryService.cartService.ValorTotalTabla) | currency  : 'USD' : 'symbol' : '1.0'}}</ion-label>-->
+<!--      <ion-label style="text-align: center;font-weight: bold;color: black;font-size: 70%">Completar Orden</ion-label>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->
+
+<!--TODO LO DEL MENU-->
+
+<ion-menu #elMenu side="start" menuId="first" contentId="home">
+    <div style="display: flex;flex-direction: column;height: 100%;width: 100%">
+        <!--    INFO PERSONA-->
+        <div style="margin-right: auto;display: flex;flex-direction: column;height: 20%;width: 100%; margin-top: 20px;">
+            <ion-icon style="margin: auto;font-size: 13vh" name="person-circle-outline"></ion-icon>
+            <ion-label style="font-weight: bold;font-size: x-large;text-align: center">{{this.accountService.GetFullName()}}</ion-label>
+        </div>
+        <!--    CONTENEDOR OPCIONES-->
+        <div style="display: flex;flex-direction: column;flex: auto; margin-top: 20px;">
+            <!--      OPCIÓN DE MI PERFIL-->
+            <div class="SidebarOpcion" (click)="this.PanelMiPerfil = true;this.elMenu.close();">
+                <ion-icon name="person-outline"></ion-icon>
+                <ion-label> Mi perfil </ion-label>
+            </div>
+            <!--      OPCIÓN DE MIS PEDIDOS-->
+            <div *ngIf="!this.ProvInvalido" class="SidebarOpcion" (click)="this.GoToPedidos()">
+                <ion-icon name="list-outline"></ion-icon>
+                <ion-label> Mis pedidos </ion-label>
+            </div>
+            <!--      OPCIÓN DE MIS CUPONES-->
+            <div *ngIf="!this.ProvInvalido" class="SidebarOpcion">
+                <ion-icon name="pricetags-outline"></ion-icon>
+                <ion-label> Mis cupones </ion-label>
+            </div>
+            <!--      OPCIÓN DE SOPORTE-->
+            <div *ngIf="!this.ProvInvalido" class="SidebarOpcion">
+                <ion-icon name="help-buoy-outline"></ion-icon>
+                <ion-label> Soporte </ion-label>
+            </div>
+            <!--      OPCIÓN DE SALIR-->
+            <div class="SidebarOpcion" (click)="this.LogOut()">
+                <ion-icon style="transform: scaleX(-1)" name="log-out-outline"></ion-icon>
+                <ion-label> Cerrar sesión </ion-label>
+            </div>
+        </div>
+    </div>
+</ion-menu>
+
+<!--MENSAJE DE BIENVENIDA-->
+
+<div class="ContenedorLoading" style="background-color: #00000085;opacity: 0" [hidden]="!PanelTienda" [ngClass]="PanelTienda ? 'WelcomMSGmostrando':'WelcomMSGoculto'">
+    <div style="width: 90%;height: 60%;display: flex;background-color: white;margin: auto;overflow: hidden;border-radius: 20px;flex-direction: column; padding-top: 15px; padding-bottom: 15px;">
+        <!--    MENSAJE-->
+        <div style="width: 100%;height: 20%;display: flex;flex-direction: column">
+            <ion-label style="color: black;margin: auto;font-size: 110%;font-weight: bold;text-align: center">{{billingService.ProviderInfo.Name}}</ion-label>
+            <ion-label style="color: black;margin: auto;font-size: 90%;text-align: center">{{billingService.ProviderInfo.Address}}</ion-label>
+        </div>
+        <!--    LOGO TIENDA SELECCIONADA-->
+        <div style="width: 100%; display: flex; padding: 10px;">
+            <img style="margin: auto; width: 38%;" src="assets/koto1-2.jpg">
+        </div>
+        <!--    INFO-->
+        <div style="width: 80%;height: 20%;display: flex;margin: auto;flex-direction: column">
+            <div>
+                <ion-icon name="location-outline"></ion-icon>
+                <ion-label style="margin-left: 10px; font-size: 85%;">{{billingService.ProviderInfo.CityName}}, {{billingService.ProviderInfo.Address}}</ion-label>
+            </div>
+            <div>
+                <ion-icon name="call-outline"></ion-icon>
+                <ion-label style="margin-left: 10px;  font-size: 85%;">{{billingService.ProviderInfo.Phone}}</ion-label>
+            </div>
+            <div>
+                <ion-icon name="mail-outline"></ion-icon>
+                <ion-label style="margin-left: 10px;  font-size: 85%;">{{billingService.ProviderInfo.Email}}</ion-label>
+            </div>
+        </div>
+        <!--    MENSAJE-->
+        <div style="width: 80%;height: 10%;display: flex;margin: auto;flex-direction: column">
+            <ion-label style="color: black;margin: auto;font-size: 80%;text-align: center">Esta es tu Tienda724 más cercana</ion-label>
+        </div>
+        <!--    BOTON CONTINUAR-->
+        <div style="width: 100%;height: 15%;display: flex">
+            <ion-button style="--background: #513089; color:white;font-weight: 600; width: 80%;margin: auto;text-transform: capitalize;" (click)="PanelTienda = false;" shape="full" expand="block">Volver</ion-button>
+        </div>
+    </div>
+</div>
+
+<!--PANEL DE MI PERFIL-->
+
+<div class="ContenedorLoading" style="background-color: #00000085;opacity: 0" [hidden]="!PanelMiPerfil" [ngClass]="PanelMiPerfil ? 'WelcomMSGmostrando':'WelcomMSGoculto'">
+    <div style="width: 80%;height: 60%;display: flex;background-color: white;margin: auto;overflow: hidden;border-radius: 20px;flex-direction: column; padding-top: 10px; padding-bottom: 10px;">
+        <!--    MENSAJE-->
+        <div style="width: 100%;height: 20%;display: flex;flex-direction: column">
+            <ion-label style="color: black;margin: auto;font-size: 90%;font-weight: bold;text-align: center">{{accountService.GetFullName()}}</ion-label>
+        </div>
+        <!--    LOGO TIENDA SELECCIONADA-->
+        <div style="width: 100%;height: 40%;display: flex">
+            <ion-img style="background-color: white;height: 90%;border-radius: 20px;margin: auto;width: 50%" src="assets/koto1-2.jpg"></ion-img>
+        </div>
+        <!--    INFO-->
+        <div style="width: 80%;height: 20%;display: flex;margin: auto;flex-direction: column">
+            <div>
+                <ion-icon name="location-outline"></ion-icon>
+                <ion-label style="margin-left: 10px; font-size: 80%;">{{accountService.usuarioCompleto.city_NAME}}, {{accountService.usuarioCompleto.address}}</ion-label>
+            </div>
+            <div>
+                <ion-icon name="call-outline"></ion-icon>
+                <ion-label style="margin-left: 10px; font-size: 85%;">{{accountService.usuarioCompleto.phone}}</ion-label>
+            </div>
+            <div>
+                <ion-icon name="mail-outline"></ion-icon>
+                <ion-label style="margin-left: 10px; font-size: 85%;">{{accountService.usuarioCompleto.email}}</ion-label>
+            </div>
+        </div>
+        <!--    MENSAJE-->
+        <div style="width: 80%;height: 10%;display: flex;margin: auto;flex-direction: column">
+            <ion-label style="color: black;margin: auto;font-size: 80%">Esta es la información de tu perfíl.</ion-label>
+        </div>
+        <!--    BOTON CONTINUAR-->
+        <div style="width: 100%;height: 15%;display: flex">
+            <ion-button style="--background: #513089; color:white; width: 80%;margin: auto;text-transform: capitalize; font-weight: 600;" (click)="PanelMiPerfil = false;" shape="full" expand="block">Volver</ion-button>
+        </div>
+    </div>
+</div>
+
+<!--CONTENEDOR LOADING-->
+
+<div class="ContenedorLoading" *ngIf="this.commonOperations.mostrandoCargando">
+    <div class="wrapper2">
+        <ion-card style="background-color: white;margin: auto;margin-bottom: 5vh;width: 80%">
+            <ion-card-content>
+                <!--suppress HtmlRequiredAltAttribute, HtmlDeprecatedAttribute -->
+                <ion-img style="background-color: white;height: 90%;border-radius: 20px;margin: auto;width: 70%" src="assets/koto2.jpg"></ion-img>
+            </ion-card-content>
+        </ion-card>
+        <div class='ThePreLoader'>
+            <div class='loader--dot'></div>
+            <div class='loader--dot'></div>
+            <div class='loader--dot'></div>
+            <div class='loader--dot'></div>
+            <div class='loader--dot'></div>
+            <div class='loader--dot'></div>
+            <div class='loader--text'></div>
+        </div>
+    </div>
+</div>

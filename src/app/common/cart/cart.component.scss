@@ -1,0 +1,32 @@
+.AjustesTabla{
+  box-shadow: unset;
+}
+
+::ng-deep datatable-header-cell, ::ng-deep datatable-header{
+  height: 0 !important;
+  padding: 0 !important;
+}
+
+::ng-deep .datatable-body-cell-label{
+  height: 100% !important;
+}
+
+.EstiloIconosSumarRestar{
+  margin: auto;
+  border: solid 1px #a0a0a0;
+  border-radius: 20px;
+  color: #a0a0a0;
+  font-size: 30px;
+}
+
+.InputSumarRestar{
+  max-width: 40%;
+  margin: auto;
+  border-bottom: solid 1px #a0a0a0;
+  height: 50%;
+  display: flex;
+  text-align: center;
+  ::ng-deep input{
+    padding: 0;
+  }
+}

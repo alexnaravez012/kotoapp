@@ -1,0 +1,53 @@
+.ContenedorImagen {
+    height: 70%;
+    width: 100%;
+    text-align: center;
+}
+
+.TextoCategoria {
+    flex: auto;
+    text-transform: capitalize;
+    //white-space:nowrap;
+    text-align: center;
+    //padding: 4px;
+    //background-color: #178ec7;
+    color: inherit;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 65px;
+    font-size: 13px;
+}
+
+.ContenidoLinea {
+    height: 100%;
+    width: 100%;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.AjusteImg {
+    height: 100%;
+    width: 100%;
+}
+
+.ContenedorLinea {
+    margin: 0;
+    display: flex;
+    float: left;
+    width: calc(33vw - 12px);
+    margin-top: 10px;
+    margin-left: 10px;
+    height: 20vh;
+    color: #f2f2f1;
+    background-color: #7145bd;
+    border: solid 2px #7145bd;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.ContenedorLinea:after {
+    clear: both
+}

@@ -1,0 +1,39 @@
+<ion-content>
+    <div class="laCard">
+        <!--HEADER-->
+        <ion-img class="size-logo" src="assets/koto1.jpg"></ion-img>
+        <!--CONTENIDO-->
+        <div>
+            <!--                EL SPINNER PARA EL LOADING INICIAL-->
+            <!--                <ion-spinner style="margin: auto;width: 50vw;height: 50vw;color:red" *ngIf="mostrarLoadingInicial" name="crescent"></ion-spinner>-->
+            <!--        FORM DEL LOGIN-->
+            <form [formGroup]="loginForm" class="container-form">
+                <div class="box-input-login">
+                    <ion-icon style="margin: auto;width: 15%;" name="person-outline"></ion-icon>
+                    <ion-input class="input-login" (ionFocus)="FocusInputs()" (keyup.enter)="focuspass()" formControlName="username" type="text"> </ion-input>
+                    <div style="margin: auto;width: 10%;"></div>
+                </div>
+                <!--                INPUT PASSWORD-->
+                <div class="box-input-login">
+                    <ion-icon name="key-outline" style="margin: auto;width: 15%;"></ion-icon>
+                    <ion-input class="input-login" (ionFocus)="FocusInputs()" (keyup.enter)="Login()" #password formControlName="password" [type]="this.MostrarPass ? '':'password'"></ion-input>
+                    <ion-icon [name]="this.MostrarPass ? 'eye-off-outline':'eye-outline'" style="margin: auto;width: 15%;cursor: pointer" (click)="ChangePassMode()"></ion-icon>
+                </div>
+
+                <!--        FORM DEL LOGIN CON EL BOTON-->
+                <ion-button class="button-enter" (click)="Login()" expand="block">Iniciar Sesión</ion-button>
+
+                <!--            RECUPERAR CLAVE-->
+                <div (click)="ClickRecoverPassword()">
+                    <h6 class="uk-margin-remove font-size-13 uk-text-muted">¿Olvidaste tu contraseña?</h6>
+                </div>
+            </form>
+            <div class="padding-horizontal-30">
+                <div class="hr-tab"></div>
+                <!--        FORM DEL LOGIN CON EL BOTON-->
+                <ion-button class="button-register" (click)="LoginMail()" expand="block">Crea cuenta nueva</ion-button>
+            </div>
+        </div>
+    </div>
+</ion-content>
+<!--CONTENEDOR-->

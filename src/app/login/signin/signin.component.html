@@ -1,0 +1,214 @@
+<ion-content>
+    <div>
+        <!--  flecha atras y titulo-->
+        <div style="margin-top: 10px;">
+            <ion-icon style="font-size: xx-large;position: absolute;left: 2%;top: 1%;" (click)="BackMainLogin()" name="arrow-back-outline"></ion-icon>
+            <ion-label class="uk-text-bold" style="margin: auto; color: #513089;">Registrarte</ion-label>
+            <ion-icon style="font-size: xx-large;position: absolute;right: 2%;top: 1%; color: #513089;" (click)="showConfirmReset()" name="refresh-circle-outline"></ion-icon>
+        </div>
+        <!--  CONTENEDOR DEL FORM-->
+        <div #ElScroll style="display: flex;flex-direction: column;height: 93%;overflow: auto;scroll-behavior: smooth">
+            <form [formGroup]="signinForm" style="width: 100%;min-height: 100%;display: flex;flex-direction: column;padding: 10px 0;position: relative">
+                <div>
+                    <ion-img class="size-logo" src="assets/koto1-1.jpg"></ion-img>
+                </div>
+                <!--            Input EMAIL-->
+                <div [ngClass]="this.GetClass(0)" [style]="'height:'+GetHeight(0)+';padding:'+GetPadding(0)" class="DefaultContainer">
+                    <ion-label style="font-size: x-large;margin: auto;">Correo Electrónico</ion-label>
+                    <ion-label style="margin: auto; font-size: 15px; margin-top: 2px;">Ingrese su correo electrónico, este va a ser su usuario para ingresar a la aplicación</ion-label>
+                    <div [style]="this.signinForm.controls.email.disabled ? 'border-color: rgb(209, 209, 209);':'border-color: rgb(209, 209, 209);'" style="display: flex;width: 100%;border-color: rgb(209, 209, 209);border-radius: 20px;border: solid;overflow: auto; height: 40px;">
+                        <ion-input #mailInput (keyup.enter)="VerificarUsuario()" style="width: 85%;flex: unset;background-color: white;" placeholder="Correo Electronico" formControlName="email" type="text"> </ion-input>
+                        <div style="width: 15%;display: flex;overflow: hidden;margin-left: auto;background-color: rgb(206, 206, 206);">
+                            <ion-button [style]="this.signinForm.controls.email.disabled ? '--background: rgb(209, 209, 209);':'--background: rgb(209, 209, 209);'" expand="block" style="width: 100%;height: inherit;margin: 0;--background: rgb(218, 218, 218); --background-focused: #b4bcc0; --background-hover: #b4bcc0; --background-activated: #b4bcc0;">
+                                <ion-icon name="mail-outline"></ion-icon>
+                            </ion-button>
+                        </div>
+                    </div>
+                    <div style="width: 83%;margin: 0 auto">
+                        <div *ngIf="UsuarioEnUso == true" style="color: red">El correo ya está en uso!</div>
+                        <!--                        <div *ngIf="UsuarioEnUso == -1" style="color: gray">Verificando</div>-->
+                        <!--                        <div *ngIf="UsuarioEnUso == false" style="color: green">Válido</div>-->
+                    </div>
+                    <ion-button *ngIf="PasoActual == 0" [style]="(!this.signinForm.controls.email.valid || this.signinForm.controls.email.value == '' || this.signinForm.controls.email.value == null) ? '--background: #513089;':''" class="EstiloBasicoBoton" (click)="VerificarUsuario()">Continuar</ion-button>
+                    <!--                    <ion-button [hidden]="PasoActual == 0" [style]="(!this.signinForm.controls.email.valid || this.signinForm.controls.email.value == '') ? 'opacity:0.5':'opacity:1'" class="EstiloBasicoBoton EstiloBotonUsado" (click)="VerificarUsuario()">Verificar</ion-button>-->
+                </div>
+                <!--            INPUT DOCUMENTO-->
+                <div [hidden]="PasoActual == 0" [ngClass]="this.GetClass(1)" [style]="'height:'+GetHeight(0)+';padding:'+GetPadding(1)+(PasoActual == 1 ? ';margin-bottom: 0px;':'')" class="DefaultContainer">
+                    <ion-label style="font-size: x-large;margin: auto">Documento</ion-label>
+                    <div style="display: flex">
+                        <ion-select interface="popover" formControlName="doctype" placeholder="Seleccione" style="border-color: rgb(209, 209, 209) !important;border-radius: 20px;border: solid;width: 25%;margin: 0 auto; height: 40px;">
+                            <ion-select-option value="3">C.C</ion-select-option>
+                            <ion-select-option value="42">T.I</ion-select-option>
+                            <ion-select-option value="2">C.E</ion-select-option>
+                            <ion-select-option value="81">PEP</ion-select-option>
+                            <ion-select-option value="41">P.A</ion-select-option>
+                            <ion-select-option value="44">R.C</ion-select-option>
+                            <ion-select-option value="43">RUT</ion-select-option>
+                            <ion-select-option value="61">T.E</ion-select-option>
+                            <ion-select-option value="62">NIT</ion-select-option>
+                        </ion-select>
+                        <div [style]="this.signinForm.controls.doc.disabled ? 'border-color: rgb(209, 209, 209);':'border-color: rgb(209, 209, 209);'" style="display: flex;border-color: black;border-radius: 20px;border: solid;overflow: auto;margin-left: auto;width: 73%; height: 40px;">
+                            <ion-input #DocumentInput (keyup.enter)="VerificarInputDocumento()" style="background-color: white;width: 80%;flex: unset;margin: 0;" formControlName="doc" type="text" placeholder="Documento"> </ion-input>
+                            <div style="width: 20%;display: flex;overflow: hidden;background-color: black;" [style]="this.signinForm.controls.doc.disabled ? 'background-color: gray;':'background-color: black;'">
+                                <ion-button expand="block" [style]="this.signinForm.controls.doc.disabled ? '--background: rgb(209, 209, 209);':'--background: rgb(209, 209, 209);'" style="width: 100%;height: inherit;margin: 0; --background-focused: #b4bcc0; --background-hover: #b4bcc0; --background-activated: #b4bcc0;">
+                                    <ion-icon name="person-outline"></ion-icon>
+                                </ion-button>
+                            </div>
+                        </div>
+                    </div>
+                    <ion-button *ngIf="PasoActual == 1" [style]="(!this.signinForm.controls.doc.valid || this.signinForm.controls.doc.value == '') ? '--background: #513089;':'--background: #513089'" class="EstiloBasicoBoton" (click)="VerificarInputDocumento()">Continuar</ion-button>
+                    <!--                    <ion-button *ngIf="PasoActual != 1" [style]="(!this.signinForm.controls.doc.valid || this.signinForm.controls.doc.value == '') ? 'opacity:0.5':'opacity:1'" class="EstiloBasicoBoton EstiloBotonUsado" (click)="VerificarInputDocumento()">Verificar</ion-button>-->
+                </div>
+                <div [hidden]="PasoActual == 0" [ngClass]="this.GetClass(2)" [style]="'height:'+GetHeight(2)+';padding:'+GetPadding(2)" class="DefaultContainer">
+                    <!--      INPUT FULL NAME-->
+                    <div style="width: 100%">
+                        <ion-label position="stacked" style="font-size: x-large;margin: auto">Tus Nombres</ion-label>
+                    </div>
+                    <ion-input #NamesInput (keyup.enter)="FocusApellidos()" style="text-transform: capitalize; border: 2px solid rgb(209, 209, 209); border-radius: 20px; margin: auto;flex: unset; height: 40px;" formControlName="firstName" type="text" placeholder="Nombres">
+                    </ion-input>
+                    <div style="width: 100%">
+                        <ion-label position="stacked" style="font-size: x-large;margin: auto">Tus Apellidos</ion-label>
+                    </div>
+                    <ion-input #ApellidosInput (keyup.enter)="UnFocusApellidos()" (ionBlur)="NextFromName($event)" style="text-transform: capitalize;background-color: white;border: 2px solid rgb(209, 209, 209); border-radius: 20px; margin: auto;flex: unset; height: 40px;"
+                        formControlName="firstLastName" type="text" placeholder="Apellidos"> </ion-input>
+                    <ion-button *ngIf="PasoActual == 2" class="EstiloBasicoBoton" (click)="NextFromName()" [style]="(!this.signinForm.controls.firstName.valid || this.signinForm.controls.firstName.value == '') && !this.signinForm.controls.firstName.disabled ? '--background: #513089;':'--background: #513089'"
+                        [disabled]="(!this.signinForm.controls.firstName.valid || this.signinForm.controls.firstName.value == '') && !this.signinForm.controls.firstName.disabled">Continuar</ion-button>
+                </div>
+                <div [hidden]="PasoActual == 0" [ngClass]="this.GetClass(3)" [style]="'height:'+GetHeight(3)+';padding:'+GetPadding(3)" class="DefaultContainer">
+                    <!--                INPUT TELEFONO-->
+                    <div style="width: 100%">
+                        <ion-label position="stacked" style="font-size: x-large;margin: auto">Tu Celular</ion-label>
+                    </div>
+                    <ion-input #Phone (keyup.enter)="UnFocusTelefono()" (ionBlur)="NextFromPhone($event)" style="background-color: white;border: 2px solid rgb(209, 209, 209);;border-radius: 20px; ;margin: auto;flex: unset; height: 40px;" formControlName="phone" type="number"
+                        placeholder="Ingresa el número">
+                    </ion-input>
+                    <ion-button *ngIf="PasoActual == 3" class="EstiloBasicoBoton" (click)="NextFromPhone({target:{value:'-1'}})" [style]="(!this.signinForm.controls.phone.valid || this.signinForm.controls.phone.value == '') ? '--background: #513089;':'--background: #513089'"
+                        [disabled]="(!this.signinForm.controls.phone.valid || this.signinForm.controls.phone.value == '')">Continuar</ion-button>
+                </div>
+                <div [hidden]="PasoActual == 0" [ngClass]="this.GetClass(4)" [style]="'height:'+GetHeight(4)+';padding:'+GetPadding(4)" class="DefaultContainer">
+                    <!--                    ESPACIO-->
+                    <div style="height: 5%;width: 100%"></div>
+
+                    <!-- <div class="ion-padding">
+
+                        <button (click)="getCurrentCoordinates()" expand="block" style="background-color: #513089 !important; height: 40px; font-size: 15px; width: 100%;">
+                            Ir a mi ubicacion
+                        </button>
+
+                        <ion-list>
+                            <ion-list-header>
+                                <ion-label>Coordenadas</ion-label>
+                            </ion-list-header>
+                            <ion-item>
+                                <ion-label>
+                                    Latitud
+                                </ion-label>
+                                <ion-badge color="danger" slot="end">{{lat}}</ion-badge>
+                            </ion-item>
+                            <ion-item>
+                                <ion-label>
+                                    Longitud
+                                </ion-label>
+                                <ion-badge color="danger" slot="end">{{lng}}</ion-badge>
+                            </ion-item>
+                        </ion-list>
+                    </div> -->
+
+
+
+                    <!--                    COSO SOBRE MAPA-->
+                    <div style="margin: auto 0;display: flex;flex-direction: column;height: 45%; display: inline;">
+                        <div style="width: 100%;">
+                            <ion-label position="stacked" style="font-size: 140%;margin: auto">Tu Dirección</ion-label>
+                        </div>
+                        <div style="width: 100%;">
+                            <ion-label position="stacked" style="font-size: 80%;margin: auto">Escribela y da click en 'Localizar'.</ion-label>
+                        </div>
+                        <div style="display: flex;flex-direction: column;width: 100%;margin: 0 auto;height: 77%;">
+                            <div style="display: flex;height: 16.6%;">
+                                <ion-icon style="margin: auto 0;width: 23px;font-size: 20px;margin-right: 7px;" name="locate-outline"></ion-icon>
+                                <!--                        CITY-->
+                                <!-- <ion-select #SelectCity interface="popover" (ionChange)="SelectCityInput($event)" formControlName="city" value="11001" placeholder="Selecciona tu ciudad" style="border-bottom: solid 1px black;width: calc(100% - 23px);height: 70%;margin: auto 0;">
+                                     <ion-select-option *ngFor="let city of cityList" [value]="city.id_CITY">{{city.city_NAME}}</ion-select-option>
+                                     </ion-select> -->
+                                <ion-item>
+                                    <ion-label>Seleccione Ciudad</ion-label>
+                                    <ionic-selectable item-content #SelectCity [(ngModel)]="defaultCityCode" [ngModelOptions]="{standalone: true}" placeholder="Seleccione Ciudad" [items]="cityList" itemValueField="id_CITY" itemTextField="city_NAME" [canSearch]="true" (onChange)="SelectCityInput($event)"
+                                        (onSearch)="searchCity($event)" [shouldFocusSearchbar]="true" style="width: 100%;">
+                                    </ionic-selectable>
+                                </ion-item>
+                            </div>
+                            <div style="display: flex;height: 16.6%;">
+                                <ion-icon style="margin: auto 0;width: 23px;font-size: 20px;margin-right: 7px;" name="map-outline"></ion-icon>
+                                <!--                                STREET-->
+                                <ion-select #streetType (ionChange)="focusStreet1()" interface="popover" formControlName="street" value="Calle" placeholder="Seleccione" style="border-bottom: solid 1px black;width: 27%;height: 70%;margin: auto 0;">
+                                    <ion-select-option value="Avenida">Avenida</ion-select-option>
+                                    <ion-select-option value="Avenida Calle">Avenida Calle</ion-select-option>
+                                    <ion-select-option value="Avenida Carrera">Avenida Carrera</ion-select-option>
+                                    <ion-select-option value="Calle">Calle</ion-select-option>
+                                    <ion-select-option value="Carrera">Carrera</ion-select-option>
+                                    <ion-select-option value="Circular">Circular</ion-select-option>
+                                    <ion-select-option value="Circunvalar">Circunvalar</ion-select-option>
+                                    <ion-select-option value="Diagonal">Diagonal</ion-select-option>
+                                    <ion-select-option value="Manzana">Manzana</ion-select-option>
+                                    <ion-select-option value="Transversal">Transversal</ion-select-option>
+                                    <ion-select-option value="Via">Via</ion-select-option>
+                                </ion-select>
+                                <ion-input #streetNumber1 (keyup.enter)="focusStreet2()" style="width: 62%;background-color: white;border-bottom: solid 1px black;height: 70%;margin: auto 0;margin-left: auto;flex: unset;" formControlName="streetNumber1" type="text" placeholder="1a sur">
+                                </ion-input>
+                            </div>
+                            <div style="display: flex;height: 16.6%;">
+                                <ion-label style="margin: auto 0;width: 30px">N°</ion-label>
+                                <ion-input #streetNumber2 (keyup.enter)="focusStreet3()" style="width: 28%;background-color: white;border-bottom: solid 1px black;margin: auto;flex: unset;height: 70%;" formControlName="streetNumber2" type="text" placeholder="2c"> </ion-input>
+                                <ion-label style="margin: auto 0">-</ion-label>
+                                <ion-input #streetNumber3 (keyup.enter)="this.focusstreetOptinalInfo()" autocomplete="off" style="width: 64%;background-color: white;border-bottom: solid 1px black;margin: auto;height: 70%;flex: unset;" formControlName="streetNumber3" type="text" placeholder="32">
+                                </ion-input>
+                            </div>
+                            <div style="display: flex;height: 16.6%;">
+                                <ion-icon style="margin: auto 0;width: 23px;font-size: 20px;margin-right: 7px;" name="information-circle-outline"></ion-icon>
+                                <ion-input #streetOptinalInfo (keyup.enter)="BuscarAddress()" style="width: calc(100% - 23px);background-color: white;border-bottom: solid 1px black;margin: auto;flex: unset;height: 70%;" formControlName="streetOptinalInfo" type="text" placeholder="edificio 3 apt 405">
+                                </ion-input>
+                            </div>
+                            <div style="display: flex;height: 16.6%;">
+                                <ion-button style="height: 100%" class="EstiloBasicoBoton" (click)="this.BuscarAddress()" [style]="(!this.signinForm.controls.phone.valid || this.signinForm.controls.streetNumber1.value == '' || this.signinForm.controls.streetNumber2.value == '' || this.signinForm.controls.streetNumber3.value == '' || this.signinForm.controls.city.value == '') ? '--background: #513089;':'--background: #513089'"
+                                    [disabled]="(!this.signinForm.controls.streetNumber1.valid || this.signinForm.controls.streetNumber1.value == '' || this.signinForm.controls.streetNumber2.value == '' || this.signinForm.controls.streetNumber3.value == '' || this.signinForm.controls.city.value == '')">
+                                    Localizar </ion-button>
+                                <ion-button *ngIf="this.BusquedaAddress" style="height: 100%" class="EstiloBasicoBoton" (click)="this.NextFromAddress()"> Continuar </ion-button>
+                            </div>
+                            <div style="width: 100%;display: flex;height: 16.6%; margin-top: 30px;" *ngIf="signinForm.controls.streetNumber1.value != ''">
+                                <ion-icon style="margin: auto 0; padding-right: 10px;" name="navigate-circle-outline"></ion-icon>
+                                <ion-label style="width: calc(100% - 30px);font-size: 80%;justify-content: left;display: flex;align-items: center; ">{{ReturnFullAddress(false)}}</ion-label>
+                            </div>
+                        </div>
+                    </div>
+                    <!--  EL MAPA-->
+                    <div style="height: 55%;width: 100%;display: flex;position: relative;border-radius: 20px;overflow: hidden;" [hidden]="hideMap">
+                        <!--                    PUNTO EN EL CENTRO-->
+                        <div style="margin: auto;border-radius: 40px;width: 10px;height: 10px;background-color: red;z-index: 1"></div>
+                        <!--                    EL MAPA COMO TAL-->
+                        <div style="position: absolute;height: 100%;width: 100%;overflow: hidden">
+                            <app-here-map #ElMap appId="EMebuedoPRx7d9k0fCQn" appCode="nlzkZnNOoP5qeVGUW2ujGg" lat="3.9638013527816924" lng="-73.31064117957077"></app-here-map>
+                        </div>
+                        <!--                        COORDENADAS FLOTANTES-->
+                        <div style="position: absolute;width: 100%;bottom: 0;z-index: 1;background-color: #0c0000a3;color: white;font-size: 80%;;" *ngIf="this.ElMap != null">
+                            {{this.ElMap.GetCenter().lat | number:"1.0-5"}} {{this.ElMap.GetCenter().lng | number:"1.0-5"}}
+                        </div>
+                    </div>
+                </div>
+                <div [hidden]="PasoActual == 0" [ngClass]="this.GetClass(5)" [style]="'height:'+GetHeight(5)+';padding:'+GetPadding(5)" class="DefaultContainer">
+                    <div style="display: flex;flex-direction: column;margin: auto;width: 100%;height: 50vh">
+                        <ion-label style="font-size: xx-large;margin: auto;">Contraseña</ion-label>
+                        <div [style]="this.signinForm.controls.password.disabled ? 'border-color: rgb(209, 209, 209);':'border-color: rgb(209, 209, 209);'" style="display: flex;border-radius: 20px;border: solid;overflow: auto;margin: auto 0;">
+                            <ion-input #PasswordInput (keyup.enter)="this.CrearCuenta()" style="width: 85%;" formControlName="password" [type]="password_type"></ion-input>
+                            <div style="background-color: black;display: flex;width: 15%" [style]="this.signinForm.controls.password.disabled ? 'background-color: rgb(209, 209, 209);':'background-color: rgb(209, 209, 209);'">
+                                <ion-icon style="margin: auto;font-size: 5.5vw;color: white" name="eye" (click)="togglePasswordMode()"></ion-icon>
+                            </div>
+                        </div>
+                        <ion-button [disabled]="(this.signinForm.controls.password.value == '' || this.signinForm.controls.password.value == null || this.signinForm.controls.password.value == ' ' || this.signinForm.controls.email.value == '' || this.UsuarioEnUso != false) || (OperacionVerificarDocumentoRealizada != 2 && OperacionVerificarDocumentoRealizada != true)"
+                            style="--background: #00a854;margin: auto 0;" (click)="CrearCuenta()" shape="full" expand="block">Crear Cuenta</ion-button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</ion-content>

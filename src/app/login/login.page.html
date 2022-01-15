@@ -1,0 +1,40 @@
+<ion-content>
+    <!--    TODO LO DEL SPLASHART-->
+    <div class="wrapper2" *ngIf="mostrandoSplash" style="z-index: 1000" [ngClass]="{'AnimacionFadeOut':animacionSplash == 1}">
+        <ion-card style="background-color: white">
+            <ion-card-content>
+                <ion-img src="../../assets/koto2.jpg"></ion-img>
+            </ion-card-content>
+        </ion-card>
+        <div class="spinner">
+            <div class="cube1"></div>
+            <div class="cube2"></div>
+        </div>
+    </div>
+    <!--  CLASE CONTENEDORA, NECESARIA PARA PONER EL FONDO-->
+    <div class="wrapper" style="height: 100%" [hidden]="mostrandoSplash" [ngClass]="{'AnimacionFadeIn':animacionSplash == 2}">
+        <ion-slides #slider pager="true" [options]="slideOpts" style="height: 100%;width: 100vw">
+            <!--      Slides intro-->
+            <!--      <ion-slide>-->
+            <!--          <div style="height: 100%; width: 100%; padding: 10px;display: flex;flex-direction: column">-->
+            <!--              <h1>Explicación 1</h1>-->
+            <!--              <ion-button (click)="MoverSiguienteSlide()" style="width: calc(100% - 20px);margin-top: auto;margin-left: auto;margin-right: auto;" color="primary">Continuar</ion-button>-->
+            <!--          </div>-->
+            <!--      </ion-slide>-->
+            <!--      <ion-slide>-->
+            <!--          <div style="height: 100%; width: 100%; padding: 10px;display: flex;flex-direction: column">-->
+            <!--              <h1>Explicación 2</h1>-->
+            <!--              <ion-button (click)="MoverSiguienteSlide()" style="width: calc(100% - 20px);margin-top: auto;margin-left: auto;margin-right: auto;" color="primary">Continuar</ion-button>-->
+            <!--          </div>-->
+            <!--      </ion-slide>-->
+            <!--      Slide de login-->
+            <ion-slide style="height: 100%;width: 100%">
+                <app-login_login style="height: 100%;width: 100%" [loginMainClass_input]="this"></app-login_login>
+            </ion-slide>
+            <!--      Slide de login-->
+            <ion-slide style="height: 100%;width: 100%">
+                <app-signin style="height: 100%;width: 100%" [loginMainClass_input]="this"></app-signin>
+            </ion-slide>
+        </ion-slides>
+    </div>
+</ion-content>

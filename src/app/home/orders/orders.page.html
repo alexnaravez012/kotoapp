@@ -1,0 +1,95 @@
+<ion-header style="background-color: white;height: 7%">
+    <div style="height: 100%;width: 100%;display: flex;margin: 0 auto; box-shadow: 6px 0px 8px 2px #d9d7d7; padding-left: 20px;">
+        <ion-icon name="arrow-back-outline" style="margin: auto 0;font-size: 20px; color: #513089;" (click)="GoToHome()"></ion-icon>
+        <ion-label style="margin: auto;font-weight: bold;font-size: 100%;padding-top: 3px; color: #513089;">Historial Pedidos</ion-label>
+        <ion-icon name="arrow-back-outline" style="margin: auto 0;font-size: x-large;color: white"></ion-icon>
+    </div>
+</ion-header>
+<div style="height: 100%;width: 100%">
+    <!--    CLASE QUE DEFINE EL GRID-->
+    <div class="layout">
+        <!--        INPUT DE LA PRIMERA PESTAÑA-->
+        <input name="nav" type="radio" class="home-radio" id="p_activos" checked="checked" />
+        <!--        CONTENEDOR DE LA PRIMERA PESTAÑA-->
+        <div class="page home-page">
+            <ion-content class="page-contents">
+                <ion-refresher slot="fixed" (ionRefresh)="ActualizarActivos($event)">
+                    <ion-refresher-content pullingIcon="chevron-down-circle-outline" pullingText="Pull to refresh" refreshingSpinner="circles" refreshingText="Refreshing...">
+                    </ion-refresher-content>
+                </ion-refresher>
+                <div class="TarjetaPedido" *ngFor="let pedido of this.billingService.ListadoPedidosActivos;let i = index">
+                    <div style="display: flex;height: 75%;margin: auto;border-bottom: solid 1px black;width: 90%;padding-top: 5px;" (click)="this.ClickOrder(pedido,0)">
+                        <div style="display: flex;flex-direction: column;flex-shrink: 0;">
+                            <div style="display: flex;margin: auto;font-size: 100%;margin-top: 0">{{pedido.numdocumento}}</div>
+                            <div style="font-size: 80%;margin: 0 auto;margin-bottom: auto">N° Pedido</div>
+                        </div>
+                        <div style="flex: auto;padding-left: 20px;display: flex;flex-direction: column">
+                            <ion-label style="font-size: 90%;">{{this.FormatedDate(pedido.fecha)}}</ion-label>
+                            <ion-label style="margin: auto 0; font-size: 70%;">{{BillStateToText(pedido.id_BILL_STATE)}}</ion-label>
+                        </div>
+                        <div style="display: flex">
+                            <ion-icon style="margin: 0 auto; font-size: 35px; color: #513089;" name="arrow-forward-circle-outline"></ion-icon>
+                        </div>
+                    </div>
+                    <div style="display: flex;height: 30%;margin: auto;width: 90%">
+                        <ion-label (click)="this.ClickOrder(pedido,1)">Calificar</ion-label>
+                        <ion-label (click)="this.ClickOrder(pedido,2)" style="margin-left: auto">Repetir Pedido</ion-label>
+                    </div>
+                </div>
+            </ion-content>
+        </div>
+        <!--        LA PESTAÑA COMO TAL, EL HEADER-->
+        <label class="nav" for="p_activos">
+      <div style="height: 100%;box-shadow: 6px 0px 8px 2px #d9d7d7;width: 100%;display: flex;flex-direction: column;margin-bottom: 6px;">
+        <div style="display: flex;flex: auto;">
+        <span style="margin: auto; margin-left: 20px;font-size: 17px">
+          Activos
+        </span>
+        </div>
+        <div name="line" style="width: 100%;height: 0.55vh;"></div>
+      </div>
+    </label>
+
+        <!--        INPUT DE LA SEGUNDA PESTAÑA-->
+        <input name="nav" type="radio" class="about-radio" id="p_finalizados" />
+        <!--        CONTENEDOR DE LA SEGUNDA PESTAÑA-->
+        <div class="page about-page">
+            <ion-content class="page-contents">
+                <ion-refresher slot="fixed" (ionRefresh)="ActualizarFinalizadas($event)">
+                    <ion-refresher-content pullingIcon="chevron-down-circle-outline" pullingText="Pull to refresh" refreshingSpinner="circles" refreshingText="Refreshing...">
+                    </ion-refresher-content>
+                </ion-refresher>
+                <div class="TarjetaPedido" *ngFor="let pedido of this.billingService.ListadoPedidosFinalizados;let i = index">
+                    <div style="display: flex;height: 70%;margin: auto;border-bottom: solid 1px black;width: 90%;padding-top: 5px;" (click)="this.ClickOrder(pedido,0)">
+                        <div style="display: flex;flex-direction: column;flex-shrink: 0;">
+                            <div style="display: flex;margin: auto;font-size: 100%;margin-top: 0">{{pedido.numdocumento}}</div>
+                            <div style="font-size: 80%;margin: 0 auto;margin-bottom: auto">N° Pedido</div>
+                        </div>
+                        <div style="flex: auto;padding-left: 20px;display: flex;flex-direction: column">
+                            <ion-label>{{this.FormatedDate(pedido.fecha)}}</ion-label>
+                            <ion-label style="margin-top: auto">{{BillStateToText(pedido.id_BILL_STATE)}}</ion-label>
+                        </div>
+                        <div style="display: flex">
+                            <ion-icon style="margin: 0 auto; font-size: 35px; color: #513089" name="arrow-forward-circle-outline"></ion-icon>
+                        </div>
+                    </div>
+                    <div style="display: flex;height: 30%;margin: auto;width: 90%">
+                        <ion-label (click)="this.ClickOrder(pedido,1)">Calificar</ion-label>
+                        <ion-label (click)="this.ClickOrder(pedido,2)" style="margin-left: auto">Repetir Pedido</ion-label>
+                    </div>
+                </div>
+            </ion-content>
+        </div>
+        <!--        LA PESTAÑA COMO TAL, EL HEADER-->
+        <label class="nav" for="p_finalizados">
+      <div style="height: 100%;box-shadow: 6px 0px 8px 2px #d9d7d7;width: 100%;display: flex;flex-direction: column;margin-bottom: 6px;">
+        <div style="display: flex;flex: auto;">
+        <span style="margin: auto;margin-left: 20px;font-size: 15px">
+            Finalizados
+        </span>
+        </div>
+        <div name="line" style="width: 100%;height: 0.55vh;"></div>
+      </div>
+    </label>
+    </div>
+</div>

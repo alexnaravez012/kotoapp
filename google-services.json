@@ -1,0 +1,32 @@
+{
+    "project_info": {
+        "project_number": "144414363068",
+        "firebase_url": "https://tienda724-2b59f.firebaseio.com",
+        "project_id": "koto-2b59f",
+        "storage_bucket": "tienda724-2b59f.appspot.com"
+    },
+    "client": [{
+        "client_info": {
+            "mobilesdk_app_id": "1:144414363068:android:bfb6c20abaf709111d2fb9",
+            "android_client_info": {
+                "package_name": "com.sysware.kotov2"
+            }
+        },
+        "oauth_client": [{
+            "client_id": "144414363068-bgn3mmbf991684331v6e9iumd8fgfn1t.apps.googleusercontent.com",
+            "client_type": 3
+        }],
+        "api_key": [{
+            "current_key": "AIzaSyBZHzY7r2xhJ22DchdANosVpkUPvs9poas"
+        }],
+        "services": {
+            "appinvite_service": {
+                "other_platform_oauth_client": [{
+                    "client_id": "144414363068-bgn3mmbf991684331v6e9iumd8fgfn1t.apps.googleusercontent.com",
+                    "client_type": 3
+                }]
+            }
+        }
+    }],
+    "configuration_version": "1"
+}

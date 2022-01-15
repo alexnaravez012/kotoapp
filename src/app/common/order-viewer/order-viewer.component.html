@@ -1,0 +1,122 @@
+<ion-header style="background-color: white;height: 7%">
+    <div style="height: 100%;width: 90%;display: flex;margin: 0 auto;">
+        <ion-icon name="arrow-back-outline" style="margin: auto 0;font-size: x-large; color: #513089;" (click)="CloseModal()"></ion-icon>
+        <div style="margin: auto;display: flex;flex-direction: column">
+            <ion-label style="margin: auto;font-weight: bold;font-size: 110%; color: #513089;">{{this.Pedido.numdocumento}}</ion-label>
+            <ion-label style="margin: auto;font-weight: bold;font-size: 80%;">{{this.FormatedDate()}}</ion-label>
+        </div>
+        <ion-icon *ngIf="PedidoActivo()" name="menu-outline" style="margin: auto 0;font-size: x-large;color: black" (click)="ClickMenu($event)"></ion-icon>
+        <ion-icon *ngIf="!PedidoActivo()" name="menu-outline" style="margin: auto 0;font-size: x-large;color: white"></ion-icon>
+    </div>
+</ion-header>
+<!--  plugin loading-->
+<ion-content>
+    <div style="display: flex;flex-direction: column;padding: 20px;height: 100%;">
+        <!--    PARTE QUE MUESTRA EL ESTADO DE LA ORDEN-->
+        <div style="display: flex;flex-direction: column">
+            <div style="display: flex;margin: auto;position: relative;">
+                <ion-label style="font-size: 150%;font-weight: bold;text-align: center">{{BillStateToText(Pedido.id_BILL_STATE)}}</ion-label>
+                <ion-icon *ngIf="Pedido.id_BILL_STATE == 99" (click)="this.ShowCancelReason()" style="font-size: x-large;position: absolute;right: -20%;top: 24%;" name="help-circle-outline"></ion-icon>
+            </div>
+            <ion-label style="margin: auto;font-size: 80%; padding-bottom: 20px;">Estado</ion-label>
+        </div>
+        <div style="height: 10%;display: flex;flex-direction: column;position: relative;">
+            <div #Progress id="1" class="EstiloProgressBar label-center"></div>
+            <div #Progress id="2" class="EstiloProgressBar label-center Ocultar"></div>
+            <div #Progress id="3" class="EstiloProgressBar label-center Ocultar"></div>
+            <!--        <div #Progress id="4" class="EstiloProgressBar label-center Ocultar"></div>-->
+            <!--          el contenido del spinner-->
+            <div style="position: absolute;top: 0;left: 0;display: flex;width: 100%;height: 100%;">
+                <div [ngClass]="EtapaAvance >= 0 ? (Pedido.id_BILL_STATE == 99 ? 'CirculoCompletadoCancelado':'CirculoCompletado'):'CirculoPendiente'" style="margin: auto 0;">
+                    <div name="dentro"></div>
+                </div>
+                <div [ngClass]="EtapaAvance >= 1 ? (Pedido.id_BILL_STATE == 99 ? 'CirculoCompletadoCancelado':'CirculoCompletado'):'CirculoPendiente'" style="margin: auto;margin-right: 0">
+                    <div name="dentro"></div>
+                </div>
+                <div [ngClass]="EtapaAvance >= 2 ? (Pedido.id_BILL_STATE == 99 ? 'CirculoCompletadoCancelado':'CirculoCompletado'):'CirculoPendiente'" style="margin: auto;">
+                    <div name="dentro"></div>
+                </div>
+                <div [ngClass]="EtapaAvance >= 3 ? (Pedido.id_BILL_STATE == 99 ? 'CirculoCompletadoCancelado':'CirculoCompletado'):'CirculoPendiente'" style="margin: auto 0;">
+                    <div name="dentro"></div>
+                </div>
+            </div>
+        </div>
+        <ion-label [hidden]="Pedido.id_BILL_STATE == 807" style="font-weight: bold;font-size: 100%; padding-top: 30px;">Dirección</ion-label>
+        <ion-label [hidden]="Pedido.id_BILL_STATE != 807" style="font-weight: bold;font-size: 100%">Observaciones</ion-label>
+        <!--      contenedor mapa-->
+        <div style="width: 100%;height: 80vh;overflow: hidden;border-radius: 20px;display: flex;position: relative;padding-top: 10px;">
+            <div style="width: 100%;height: 100%;display: flex;position: absolute;">
+                <!--                    EL MAPA COMO TAL-->
+                <div style="position: absolute;height: 50%;width: 100%;overflow: hidden">
+                    <app-here-map #ElMap appId="EMebuedoPRx7d9k0fCQn" appCode="nlzkZnNOoP5qeVGUW2ujGg" lat="3.9638013527816924" lng="-73.31064117957077"></app-here-map>
+                </div>
+                <div style="background-color: #777777b3;position: absolute;height: 100%;width: 100%;overflow: hidden;display: flex;z-index: 10" *ngIf="CargandoMapa">
+                    <ion-spinner style="margin: auto;transform: scale(3);" name="circles"></ion-spinner>
+                </div>
+                <div style="background-color: #e0e6ea00;position: absolute;height: 100%;width: 100%;overflow: hidden;display: flex;z-index: 10"></div>
+            </div>
+            <!--      CONTENEDOR DE LAS OPCIONES EN CASO DE PROCESADO CON NOVEDAD-->
+            <div [hidden]="Pedido.id_BILL_STATE != 807" style="background-color: white;width: 100%;height: 100%;justify-content: space-between;display: flex;flex-direction:column;position: absolute;z-index: 20">
+                <div style="width: 100%;height: 65%;">
+                    <ion-label style="padding-top: 10px">{{this.Pedido.body.split("-")[this.Pedido.body.split("-").length-1]}}</ion-label>
+                </div>
+                <div style="width: 100%;height: 35%;display: flex;justify-content: space-between">
+                    <ion-button style="width: 50%;color: white;--background: #1f992a;font-weight: bold;" (click)="AceptarNovedad()">Aceptar Novedad</ion-button>
+                    <ion-button style="width: 50%;color: white;--background: rgb(174, 26, 26);font-weight: bold;" (click)="CancelarPedidoProcesadoConNovedad()">Cancelar Pedido</ion-button>
+                </div>
+            </div>
+        </div>
+        <!--    -->
+        <div style="display: flex;width: 100%;justify-content: space-between">
+            <div style="width: 48%;display: flex;flex-direction: column">
+                <ion-label style="padding-top: 10px;font-weight: bold">Origen</ion-label>
+                <ion-label style="padding-top: 10px;text-transform: capitalize">{{this.billingService.ProviderInfo.Name.toLowerCase()}}</ion-label>
+                <ion-label style="padding-top: 10px;text-transform: capitalize;">{{this.billingService.ProviderInfo.CityName.toLowerCase()}},{{this.billingService.ProviderInfo.Address}}</ion-label>
+            </div>
+            <div style="width: 48%;display: flex;flex-direction: column">
+                <ion-label style="padding-top: 10px;font-weight: bold">Destino</ion-label>
+                <ion-label style="padding-top: 10px;text-transform: capitalize">{{this.Pedido.cliente.toLowerCase()}}</ion-label>
+                <ion-label style="padding-top: 10px;text-transform: capitalize">{{this.accountService.usuarioCompleto.city_NAME.toLowerCase()}},{{this.Pedido.address}}</ion-label>
+            </div>
+        </div>
+        <ion-label style="margin-bottom: 0;font-size: 100%;margin-top: 10px;text-align: center" *ngIf="Distancia > 0">Distancia: {{this.Distancia/1000 | number:'1.0-1'}} km</ion-label>
+        <ion-label style="margin-bottom: 0;font-size: 100%;margin-top: 10px;text-align: center" *ngIf="Distancia <= 0">Distancia: Mayor a 50 km</ion-label>
+
+        <!--    Contenedor Detalles-->
+        <ion-label style="font-weight: bold;font-size: 110%;margin-top: 10px">Productos</ion-label>
+        <!--      contenedor Detalles-->
+        <div style="overflow: auto;width: 100%;height: 60%;display: flex;flex-direction: column">
+            <div style="width: 100%;flex: auto;display: flex;flex-direction: column">
+                <div *ngFor="let detalle of this.DetallesPedido" style="width: 95%;margin: 0 auto;margin-top: 10px;display: flex;">
+                    <div style="display: flex;flex-direction: column;width: 80%">
+                        <ion-label style="font-size: 75%;font-weight: bold">{{detalle[1]}}</ion-label>
+                        <ion-label style="font-size: 75%;">Cantidad: {{detalle[0]}}</ion-label>
+                    </div>
+                    <div style="width: 30%;display: flex">
+                        <ion-label style="margin: 0 auto; font-size: 75%;">{{roundnum(detalle[2]) | currency : 'USD' : 'symbol' : '1.0'}}</ion-label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--    Contenedor total-->
+        <div style="margin-top: 10px">
+            <ion-label style="font-weight: bold;font-size: 110%;padding-top: 20px">Resumen</ion-label>
+            <div style="display: flex;margin-top: 5px">
+                <ion-label style="font-size: 90%; margin-right: auto">Productos:</ion-label>
+                <ion-label style="font-size: 90%; ">{{roundnum(this.Pedido.totalprice) | currency : 'USD' : 'symbol' : '1.0'}}</ion-label>
+            </div>
+            <div style="display: flex;margin-top: 5px">
+                <ion-label style="font-size: 90%; margin-right: auto">Envío:</ion-label>
+                <ion-label style="font-size: 90%; ">{{roundnum(0) | currency : 'USD' : 'symbol' : '1.0'}}</ion-label>
+            </div>
+            <div style="display: flex;margin-top: 5px">
+                <ion-label style="font-size: 90%; margin-right: auto">Descuento:</ion-label>
+                <ion-label style="font-size: 90%; ">{{roundnum(0) | currency : 'USD' : 'symbol' : '1.0'}}</ion-label>
+            </div>
+        </div>
+        <!--      BOTON DE CONFIRMAR ENTREGA-->
+        <div style="display: flex;margin-top: 10px;" *ngIf="Pedido.id_BILL_STATE == 803">
+            <ion-button style="margin: auto;width: 100%;color: white;--background: #1f992a;font-weight: bold;" (click)="ConfirmarEntrega($event)">Confirmar Entrega</ion-button>
+        </div>
+    </div>
+</ion-content>

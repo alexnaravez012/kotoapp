@@ -1,0 +1,21 @@
+.EstiloCarrito {
+    transition: all 1s;
+    margin: auto;
+    display: flex;
+    background-color: #000000;
+    width: 44%;
+    border-radius: 30px;
+    padding-right: 10px;
+    position: absolute;
+    bottom: 1%;
+    left: 27%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border: none;
+}
+
+.Abierto {
+    transition: all 1s;
+    width: 60%;
+    left: 18%;
+}

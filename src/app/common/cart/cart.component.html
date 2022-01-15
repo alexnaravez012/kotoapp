@@ -1,0 +1,169 @@
+<div style="display: flex;width: 100%;height: 100%;">
+
+    <!--  //////////////////////////////////////////////-->
+    <!--  ////////// TODO CARRITO COMPRAS //////////////-->
+    <!--  //////////////////////////////////////////////-->
+    <div [hidden]="EstadoCompletarCompra != -1" style="margin: auto;width: 90%;height: 81%;margin-bottom: 20%;background-color: white;border-radius: 25px;box-shadow: 0 3px 14px 2px rgba(0, 0, 0, 0.59);display: flex;flex-direction: column;">
+        <div style="height: 8%;width: 90%;display: flex;margin: 0 auto">
+            <ion-icon name="arrow-back-outline" style="margin: auto 0;font-size: 20px; color: #513089;" (click)="CerrarModal()"></ion-icon>
+            <ion-label style="margin: auto;font-weight: bold; color: #513089;">Carrito Compras</ion-label>
+            <ion-icon name="arrow-back-outline" style="margin: auto 0;color: white;font-size: x-large;"></ion-icon>
+        </div>
+        <!--    CONTENEDOR DE LA TABLA CON EL SCROLL-->
+        <div style="height: 80%;overflow: auto;margin: 0 auto;width: 100%;">
+            <!--      LA TABLA QUE CONTIENE LOS PRODUCTOS A PEDIR-->
+            <ngx-datatable class="material striped AjustesTabla" [rows]="this.inventoriesService.cartService.ListaTablaProductosSeleccionados" [columnMode]="ColumnMode.force" headerHeight="50" footerHeight="50" rowHeight="auto" [reorderable]="reorderable">
+                <!--            FORMARO PARA LA PARTE QUE CONTIENE EL NOMBDE DEL PRODUCTO Y EL CODIGO-->
+                <ngx-datatable-column name="Producto">
+                    <ng-template let-column="column" ngx-datatable-header-template>
+                        <div style="width: 100%;font-weight: 400;text-align: center;height: 0"></div>
+                    </ng-template>
+                    <ng-template let-row="row" ngx-datatable-cell-template style="border-bottom: solid 2px black">
+                        <div style="display: flex">
+                            <div style="width: 55%">
+                                <p style="margin: 0;text-transform: capitalize;font-weight: bold">{{ row['description'].toLowerCase() }}</p>
+                                <p style="margin: 0;">{{ row['price'] + (row['price']*row['tax']) | currency : 'USD' : 'symbol' : '1.0' }}</p>
+                            </div>
+                            <div style="width: 45%;display: flex;">
+                                <div style="display: flex;height: 100%;width: 70%">
+                                    <ion-icon class="EstiloIconosSumarRestar" name="remove-outline" (click)="ClickBajar(row)"></ion-icon>
+                                    <ion-input class="InputSumarRestar" type="number" (ionFocus)="focusCarrito($event)" (ionBlur)="BlurInputCarrito($event)" (ionChange)="AjustarCantidadInput($event,row)" [(ngModel)]="row['quantity']" placeholder="Cantidad "></ion-input>
+                                    <ion-icon class="EstiloIconosSumarRestar" (click)="ClickSubir(row)" name="add-outline"></ion-icon>
+                                </div>
+                                <div style="height: 60%;width: 20%;margin: auto 0;margin-left: auto;">
+                                    <ion-icon style="width: 100%;height: 100%;color: #838383" (click)="ClickBorrar(row)" name="trash-outline"></ion-icon>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-template>
+                </ngx-datatable-column>
+            </ngx-datatable>
+        </div>
+        <!--      EL BOTON AL FINAL, EL QUE ME TIENE EL TOTAL-->
+        <div style="width: 100%;flex: auto;display: flex;padding: 10px">
+            <!--      <div class="EstiloCarrito" (click)="ClickCarrito()">-->
+            <!--        &lt;!&ndash;    Circulo Contenedor&ndash;&gt;-->
+            <!--        <div style="width: 5vh;height: 5vh;background-color: white;border-radius: 40px;display: flex;margin: auto;position: relative;border: solid 1px #a6a6a6;">-->
+            <!--          <div style="margin: auto">{{this.inventoryService.cartService.ListaTablaProductosSeleccionados.length}}</div>-->
+            <!--        </div>-->
+            <!--        &lt;!&ndash;    Titulo&ndash;&gt;-->
+            <!--        <div style="display: flex;flex-direction: column;margin: auto;margin-left: 0;">-->
+            <!--          <ion-label style="text-align: center;font-weight: bold;color: black;font-size: 120%">{{ roundnum(this.inventoryService.cartService.ValorTotalTabla) | currency  : 'USD' : 'symbol' : '1.0'}}</ion-label>-->
+            <!--          <ion-label style="text-align: center;font-weight: bold;color: black;font-size: 70%">Completar Orden</ion-label>-->
+            <!--        </div>-->
+            <!--      </div>-->
+            <!--      &lt;!&ndash;            PARTE QUE CONTIENE TOTAL,SUBTOTAL E IMPUESTOS&ndash;&gt;-->
+            <!--      <div style="width: 70%;margin: auto;display: flex;flex-direction: column">-->
+            <!--        <p style="margin: auto;font-size: 7vw">{{roundnum(this.CartService.ValorTotalTabla) | currency  : 'USD' : 'symbol' : '1.0'}}</p>-->
+            <!--        <p style="margin: 0 auto;font-size: 70%">Total En Resumen</p>-->
+            <!--      </div>-->
+            <!--      &lt;!&ndash;            PARTE QUE CONTIENE EL BOTON DE ENVIAR/PEDIR&ndash;&gt;-->
+            <!--      <div style="width: 20%;height: 100%;display: flex;margin-right: auto">-->
+            <!--        <ion-button (click)="ClickSiguiente()" style="width: 90%;height: 90%;margin: auto;&#45;&#45;background: #fad263" [disabled]="this.CartService.ListaTablaProductosSeleccionados.length==0">-->
+            <!--          <ion-col style="position:fixed;">-->
+            <!--            <ion-row><ion-icon style="font-size: 7vw;margin: auto;color: black" name="cart"></ion-icon></ion-row>-->
+            <!--            <ion-row><p style="margin: 0;width: 100%;color: black">Pedir</p></ion-row>-->
+            <!--          </ion-col>-->
+            <!--        </ion-button>-->
+            <!--      </div>-->
+        </div>
+    </div>
+
+    <!--  ///////////////////////////////////////////////-->
+    <!--  ////////// TODO COMPLETAR PEDIDO //////////////-->
+    <!--  ///////////////////////////////////////////////-->
+    <div *ngIf="EstadoCompletarCompra != -1" style="margin: auto;width: 100%;height: 100%;background-color: white;box-shadow: 0 3px 14px 2px rgba(0, 0, 0, 0.59);display: flex;flex-direction: column;">
+        <div style="height: 8%;width: 90%;display: flex;margin: 0 auto">
+            <ion-icon name="arrow-back-outline" style="margin: auto 0;font-size: x-large; color: #513089;" (click)="this.EstadoCompletarCompra = -1;this.inventoriesService.CarritoEnFinal = false;"></ion-icon>
+            <ion-label style="margin: auto;font-weight: bold; color: #513089;">Completar Pedido</ion-label>
+            <ion-icon name="arrow-back-outline" style="margin: auto 0;color: white;font-size: x-large;"></ion-icon>
+        </div>
+        <!--    CONTENEDOR SCROLL-->
+        <div style="width: 90%;height: 80%;overflow: auto;display: flex;flex-direction: column;margin: auto">
+            <div style="display: flex;flex-direction: column;">
+                <!--    Mostrar dirección de entrega-->
+                <ion-label style="font-weight: bold;font-size: 100%">Dirección</ion-label>
+                <!--      contenedor mapa-->
+                <div style="width: 100%;height: 25vh;overflow: hidden;border-radius: 20px;display: flex;position: relative;padding-top: 10px">
+                    <!--                    PUNTO EN EL CENTRO-->
+                    <div style="margin: auto;border-radius: 40px;width: 10px;height: 10px;background-color: red;z-index: 1"></div>
+                    <!--                    EL MAPA COMO TAL-->
+                    <div style="position: absolute;height: 100%;width: 100%;overflow: hidden">
+                        <app-here-map #ElMap appId="EMebuedoPRx7d9k0fCQn" appCode="nlzkZnNOoP5qeVGUW2ujGg" lat="3.9638013527816924" lng="-73.31064117957077"></app-here-map>
+                    </div>
+                    <div style="background-color: #777777b3;position: absolute;height: 100%;width: 100%;overflow: hidden;display: flex;z-index: 10" *ngIf="CargandoMapa">
+                        <ion-spinner style="margin: auto;transform: scale(3);" name="circles"></ion-spinner>
+                    </div>
+                    <div style="background-color: #e0e6ea00;position: absolute;height: 100%;width: 100%;overflow: hidden;display: flex;z-index: 10">
+                    </div>
+                </div>
+
+                <div style="display: flex;width: 100%;justify-content: space-between">
+                    <div style="width: 48%;display: flex;flex-direction: column">
+                        <ion-label style="padding-top: 10px;font-weight: bold">Origen</ion-label>
+                        <ion-label style="padding-top: 10px;text-transform: capitalize; font-size:90%;">{{this.billing.ProviderInfo.Name.toLowerCase()}}</ion-label>
+                        <ion-label style="padding-top: 10px;text-transform: capitalize; font-size:90%;">{{this.billing.ProviderInfo.CityName.toLowerCase()}},{{this.billing.ProviderInfo.Address}}</ion-label>
+                    </div>
+                    <div style="width: 48%;display: flex;flex-direction: column">
+                        <ion-label style="padding-top: 10px;font-weight: bold">Destino</ion-label>
+                        <ion-label style="padding-top: 10px;text-transform: capitalize; font-size:90%;">{{this.accountService.GetNormalName().toLowerCase()}}</ion-label>
+                        <ion-label style="padding-top: 10px;text-transform: capitalize; font-size:90%;">{{this.accountService.usuarioCompleto.city_NAME.toLowerCase()}},{{this.accountService.usuarioCompleto.address}}</ion-label>
+                    </div>
+                </div>
+                <ion-label style="margin-bottom: 0;font-size: 100%;margin-top: 10px;text-align: center" *ngIf="Distancia > 0">Distancia: {{this.Distancia/1000 | number:'1.0-1'}} km</ion-label>
+                <ion-label style="margin-bottom: 0;font-size: 100%;margin-top: 10px;text-align: center" *ngIf="Distancia <= 0">Distancia: Mayor a 50 km</ion-label>
+
+
+                <!--    Metodo de pago-->
+                <ion-label style="font-weight: bold;font-size: 110%;padding-top: 20px">Método Pago</ion-label>
+                <ion-list style="padding-top: 10px">
+                    <ion-radio-group [(ngModel)]="MetodoPagoSeleccionado">
+
+                        <ion-item *ngFor="let metodo of MetodosPago;">
+                            <ion-label style="font-size: 80%;">{{metodo[1]}}</ion-label>
+                            <ion-radio slot="start" value="{{metodo[0]}}"></ion-radio>
+                        </ion-item>
+                    </ion-radio-group>
+                </ion-list>
+                <!--    Ingresa cupon-->
+                <ion-label style="font-weight: bold;font-size: 110%;padding-top: 20px">Cupón</ion-label>
+                <div style="display: flex">
+                    <ion-input placeholder="Ingrese un cupón, sí tiene"></ion-input>
+                    <button style="font-size: 80%; background-color: rgb(15, 123, 15); color: white; height: 40px; border-radius: 5px; width: 100px;">Aplicar</button>
+                </div>
+                <!--    Resumen-->
+                <ion-label style="font-weight: bold;font-size: 110%;padding-top: 20px">Resumen</ion-label>
+                <div style="display: flex;margin-top: 5px">
+                    <ion-label style="font-size: 90%; margin-right: auto">Productos:</ion-label>
+                    <ion-label style="font-size: 90%; ">{{roundnum(this.inventoriesService.cartService.ValorTotalTabla) | currency : 'USD' : 'symbol' : '1.0'}}</ion-label>
+                </div>
+                <div style="display: flex;margin-top: 5px">
+                    <ion-label style="font-size: 90%; margin-right: auto">Envío:</ion-label>
+                    <ion-label style="font-size: 90%; ">{{roundnum(0) | currency : 'USD' : 'symbol' : '1.0'}}</ion-label>
+                </div>
+                <div style="display: flex;margin-top: 5px">
+                    <ion-label style="font-size: 90%; margin-right: auto">Descuento:</ion-label>
+                    <ion-label style="font-size: 90%; ">{{roundnum(0) | currency : 'USD' : 'symbol' : '1.0'}}</ion-label>
+                </div>
+            </div>
+        </div>
+        <!--    CONTENEDOR TOTAL Y ENVIAR-->
+        <div style="width: 90%;flex: auto;display: flex;padding: 15px 0;margin: 0 auto">
+            <div style="background-color: #513089;border-radius: 40px;overflow: hidden;margin: auto;display: flex;height: 90%;width: 100%;padding-left: 30px;padding-right: 20px; padding-top: 10px; padding-bottom: 10px;" (click)="ClickCompletarPedido()">
+                <!--            PARTE QUE CONTIENE TOTAL Y METODO PAGO-->
+                <div style="width: 65%;margin: auto">
+                    <ion-row style="display: flex;margin: auto;height: 65%;display: flex">
+                        <p style="margin: 0;font-size: 5vw; color: white;">Total: {{roundnum(this.inventoriesService.cartService.ValorTotalTabla) | currency : 'USD' : 'symbol' : '1.0'}}</p>
+                    </ion-row>
+                    <ion-row style="display: flex;margin: auto;height: 65%; margin-bottom: 5px;">
+                        <p style="margin: 0;font-size: 3vw;margin-top: 5px; color: white;">Mediante {{this.MetodosPago[this.MetodoPagoSeleccionado][1]}}</p>
+                    </ion-row>
+                </div>
+                <!--            PARTE QUE CONTIENE EL BOTON DE ENVIAR/PEDIR-->
+                <div style="width: 35%;height: 100%;display: flex;">
+                    <ion-label style="color: white; white-space: break-spaces;height: fit-content;margin: auto;width: min-content;font-size: 100%;">Enviar Pedido</ion-label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

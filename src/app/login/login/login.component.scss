@@ -1,0 +1,94 @@
+.laCard {
+    width: 100%;
+}
+
+.box-shadow-logo {
+    overflow: hidden;
+    width: 90%;
+    height: 80%;
+    display: flex;
+    margin: auto;
+    border-radius: 20px;
+    padding: 10px
+}
+
+.size-logo {
+    margin: auto;
+    width: 60%;
+    margin-top: 40px;
+}
+
+.botonRegistro {
+    border-radius: 20px;
+    width: 100%;
+    margin: auto;
+}
+
+.container-form {
+    padding-left: 30px;
+    padding-right: 30px;
+    margin-top: 30px;
+}
+
+.box-input-login {
+    border-radius: 10px;
+    display: flex;
+    background-color: rgb(240, 240, 240);
+    height: 50px;
+    margin-bottom: 10px;
+}
+
+.box-input-login:focus {
+    outline: 0 !important;
+}
+
+.input-login {
+    background-color: rgb(240, 240, 240);
+    width: 85%;
+    font-size: 14px;
+}
+
+.input-login:focus {
+    outline: 0 !important;
+}
+
+.button-enter {
+    --background: #513089;
+    --background-focused: #6d7980;
+    --background-hover: #6d7980;
+    --background-activated: #6d7980;
+    margin-top: 20px;
+    margin-bottom: 5px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.font-size-13 {
+    font-size: 13px;
+}
+
+.hr-tab {
+    margin-top: 30px;
+    border-top: 1px solid grey;
+}
+
+.padding-horizontal-30 {
+    padding-right: 30px;
+    padding-left: 30px;
+}
+
+.image-background-login {
+    width: 100%;
+    z-index: 1;
+    position: relative;
+}
+
+.button-register {
+    --background: #000000;
+    color: white;
+    margin-top: 20px;
+    font-weight: 500;
+    border-radius: 10px;
+    font-size: 13px;
+}

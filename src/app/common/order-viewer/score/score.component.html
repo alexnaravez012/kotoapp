@@ -1,0 +1,32 @@
+<div style="display: flex;flex-direction: column;height: 40vh;width: 100%;padding: 10px;position: relative;background-color: #f0f8ff00">
+  <div style="width: 95%;height: 95%;margin: auto;position: relative;display: flex;flex-direction: column;background-color: white;padding: 10px;">
+    <!--  BOTON CERRAR-->
+    <div style="height: 30px;width: 30px;display: flex;position: absolute;top: -10px;left: -10px;overflow: hidden;background-color: #2d2d2d;color: white;border-radius: 20px">
+      <ion-icon style="margin: auto;font-size: x-large" name="close-outline" (click)="Cerrar()"></ion-icon>
+    </div>
+    <!--  CONTENEDOR TITULO-->
+    <div style="width: 100%;height: 8%;display: flex">
+      <ion-label style="font-weight: bold;font-size: 130%;margin: auto">Calificar</ion-label>
+    </div>
+    <!--  CONTENEDOR ESTRELLAS-->
+    <div style="display: flex;height: 30%">
+      <div class="NormalStarContainer" [ngClass]="Score >= 1 ? 'SelectedStarContainer':''"><ion-icon name="star-outline" (click)="Score = 1;"></ion-icon></div>
+      <div class="NormalStarContainer" [ngClass]="Score >= 2 ? 'SelectedStarContainer':''"><ion-icon name="star-outline" (click)="Score = 2;"></ion-icon></div>
+      <div class="NormalStarContainer" [ngClass]="Score >= 3 ? 'SelectedStarContainer':''"><ion-icon name="star-outline" (click)="Score = 3;"></ion-icon></div>
+      <div class="NormalStarContainer" [ngClass]="Score >= 4 ? 'SelectedStarContainer':''"><ion-icon name="star-outline" (click)="Score = 4;"></ion-icon></div>
+      <div class="NormalStarContainer" [ngClass]="Score >= 5 ? 'SelectedStarContainer':''"><ion-icon name="star-outline" (click)="Score = 5;"></ion-icon></div>
+    </div>
+    <!--  CONTENEDOR TEXT AREA-->
+    <div style="width: 100%;flex: auto">
+      <ion-item>
+        <ion-label position="stacked">Tu opinion</ion-label>
+        <!--suppress TypeScriptUnresolvedVariable -->
+        <ion-textarea (keyup)="Opinion = $event.target.value" placeholder="Cuentanos"></ion-textarea>
+      </ion-item>
+    </div>
+    <!--  CONTENEDOR BOTONES-->
+    <div style="display: flex;height: 15%">
+      <ion-button style="width: 70%;--background: green;color: white;margin: auto" (click)="Finalizar()">Finalizar Orden</ion-button>
+    </div>
+  </div>
+</div>
